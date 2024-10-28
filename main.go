@@ -1,5 +1,9 @@
 package main
 
+import (
+	"example.com/m/v2/structture"
+)
+
 /*
 给你一个包含若干星号 * 的字符串 s 。
 
@@ -140,10 +144,9 @@ func findRedundantDirectedConnection(edges [][]int) []int {
 }
 
 func main() {
-	//fmt.Println(removeStars("leet**cod*e"))
-	//fmt.Println(minSubArrayLen(11, []int{1, 2, 3, 4, 5}))
-	//num1 := []int{1, 0}
-	//num2 := []int{2}
-	//merge(num1, 1, num2, 1)
-	//fmt.Println(num1)
+	val := structture.Link{}
+	val.Val = 1
+	val.Next = &structture.Link{Val: 2, Next: &structture.Link{Val: 3, Next: &structture.Link{Val: 4}}}
+	res := val.Reserve()
+	res.Print()
 }
