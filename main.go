@@ -2,6 +2,8 @@ package main
 
 import (
 	"example.com/m/v2/structture"
+	"fmt"
+	"strconv"
 )
 
 /*
@@ -143,10 +145,48 @@ func findRedundantDirectedConnection(edges [][]int) []int {
 	return nil
 }
 
+func getPath(head *structture.Tree, path string, res *[]string) {
+	path += strconv.Itoa(head.Val.(int))
+	if head.Left == nil && head.Right == nil {
+		*res = append(*res, path[1:])
+		return
+	}
+	if head.Left != nil {
+		getPath(head.Left, path, res)
+	}
+	if head.Right != nil {
+		getPath(head.Right, path, res)
+	}
+}
+
+func validStrings(n int) []string {
+	head := &structture.Tree{
+		Val: 1,
+	}
+
+	res := make([]string, 0)
+	l := make([]*structture.Tree, 0)
+	l = append(l, head)
+	for i := 0; i < n; i++ {
+		ll := len(l)
+		for j := 0; j < ll; j++ {
+			if l[j].Val == 1 {
+				l[j].Left = &structture.Tree{Val: 1}
+				l[j].Right = &structture.Tree{Val: 0}
+				l = append(l, l[j].Left)
+				l = append(l, l[j].Right)
+			} else {
+				l[j].Left = &structture.Tree{Val: 1}
+				l = append(l, l[j].Left)
+			}
+		}
+		l = l[ll:]
+	}
+
+	getPath(head, "", &res)
+	return res
+}
+
 func main() {
-	val := structture.Link{}
-	val.Val = 1
-	val.Next = &structture.Link{Val: 2, Next: &structture.Link{Val: 3, Next: &structture.Link{Val: 4}}}
-	res := val.Reserve()
-	res.Print()
+	fmt.Println([]int{1, 2, 3}[1:2])
 }
