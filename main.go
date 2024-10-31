@@ -2,8 +2,15 @@ package main
 
 import (
 	"example.com/m/v2/structture"
+	"fmt"
 	"strconv"
 )
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
 
 /*
 给你一个包含若干星号 * 的字符串 s 。
@@ -202,5 +209,124 @@ func getSmallestString(s string) string {
 	return s
 }
 
+func kthSmallest(root *TreeNode, k int) int {
+	i := 0
+	st := make([]*TreeNode, 0)
+	cur := root
+	for cur != nil || len(st) > 0 {
+		for cur != nil {
+			st = append(st, cur)
+			cur = cur.Left
+		}
+		node := st[len(st)-1]
+		i++
+		if i == k {
+			return node.Val
+		}
+		st = st[:len(st)-1]
+		cur = node.Right
+	}
+	return -1
+}
+
+func rightSideView(root *TreeNode) []int {
+	res := make([]int, 0)
+	if root == nil {
+		return res
+	}
+	q := make([]*TreeNode, 0)
+	q = append(q, root)
+	for len(q) > 0 {
+		l := len(q)
+		res = append(res, q[l-1].Val)
+		for i := 0; i < l; i++ {
+			node := q[i]
+			if node.Left != nil {
+				q = append(q, node.Left)
+			}
+			if node.Right != nil {
+				q = append(q, node.Right)
+			}
+		}
+		q = q[l:]
+	}
+	return res
+}
+
+func flatten(root *TreeNode) {
+	linkList := make([]*TreeNode, 0)
+	linkList = append(linkList, root)
+	helper := make([]*TreeNode, 0)
+	for len(linkList) > 0 {
+		node := linkList[len(linkList)-1]
+		linkList = linkList[:len(linkList)-1]
+		helper = append(helper, node)
+		if node.Right != nil {
+			linkList = append(linkList, node.Right)
+		}
+		if node.Left != nil {
+			linkList = append(linkList, node.Left)
+		}
+	}
+	for i := 0; i < len(helper)-1; i++ {
+		helper[i].Left = nil
+		helper[i].Right = helper[i+1]
+	}
+}
+
+func flattenV2(root *TreeNode) {
+	for root != nil {
+		if root.Left == nil {
+			root = root.Right
+		} else {
+			leftSub := root.Left
+			for leftSub.Right != nil {
+				leftSub = leftSub.Right
+			}
+
+			leftSub.Right = root.Right
+			root.Right = root.Left
+			root.Left = nil
+			root = root.Right
+		}
+	}
+}
+
+func change(s []int) {
+	s = append(s, 3)
+}
+
 func main() {
+	s1 := []int{1, 2, 3}
+	s2 := s1[1:]
+	s2[1] = 4
+	fmt.Println(s1)
+	s2 = append(s2, 5, 6, 7)
+	fmt.Println(s1)
+
+	var a = []int{1, 2, 3, 4, 5}
+	var r [5]int
+
+	for i, v := range a {
+		if i == 0 {
+			a[1] = 12
+			a[2] = 13
+		}
+		r[i] = v
+	}
+	fmt.Println("r = ", r)
+	fmt.Println("a = ", a)
+
+	slice := make([]int, 5, 5)
+	slice[0] = 1
+	slice[1] = 2
+	change(slice)
+	fmt.Println(slice)
+	change(slice[0:2])
+	fmt.Println(slice)
+
+	x := make([]int, 2, 10)
+	_ = x[6:10] //1
+	_ = x[6:]   //2
+	_ = x[2:]   //3
 }
