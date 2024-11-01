@@ -320,6 +320,26 @@ func maxEnergyBoost(energyDrinkA []int, energyDrinkB []int) int64 {
 	return Max(dp[0], dp[1])
 }
 
+func quickSort(input []int) []int {
+	// 快速排序
+	if len(input) <= 1 {
+		return input
+	}
+	pivot := input[0]
+	left := make([]int, 0)
+	right := make([]int, 0)
+	for i := 1; i < len(input); i++ {
+		if input[i] < pivot {
+			left = append(left, input[i])
+		} else {
+			right = append(right, input[i])
+		}
+	}
+	left = quickSort(left)
+	right = quickSort(right)
+	return append(append(left, pivot), right...)
+}
+
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
