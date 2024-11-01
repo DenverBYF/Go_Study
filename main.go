@@ -2,6 +2,7 @@ package main
 
 import (
 	"example.com/m/v2/structture"
+	"fmt"
 	"strconv"
 )
 
@@ -295,8 +296,28 @@ func change(s []int) {
 	s = append(s, 3)
 }
 
+func Max(a, b int64) int64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
 func maxEnergyBoost(energyDrinkA []int, energyDrinkB []int) int64 {
-	return 0
+	if len(energyDrinkA) == 0 || len(energyDrinkB) == 0 {
+		return 0
+	}
+	dp := [2]int64{}
+	dp[0] = int64(energyDrinkA[0])
+	dp[1] = int64(energyDrinkB[0])
+	n := len(energyDrinkA)
+	for i := 1; i < n; i++ {
+		num1 := dp[0]
+		num2 := dp[1]
+		dp[0] = Max(num1+int64(energyDrinkA[i]), num2)
+		dp[1] = Max(num2+int64(energyDrinkB[i]), num1)
+	}
+	return Max(dp[0], dp[1])
 }
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
@@ -321,4 +342,5 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 }
 
 func main() {
+	fmt.Println(maxEnergyBoost([]int{1, 3, 1}, []int{3, 1, 1}))
 }
