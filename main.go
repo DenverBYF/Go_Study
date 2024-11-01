@@ -2,7 +2,6 @@ package main
 
 import (
 	"example.com/m/v2/structture"
-	"fmt"
 	"strconv"
 )
 
@@ -296,37 +295,30 @@ func change(s []int) {
 	s = append(s, 3)
 }
 
-func main() {
-	s1 := []int{1, 2, 3}
-	s2 := s1[1:]
-	s2[1] = 4
-	fmt.Println(s1)
-	s2 = append(s2, 5, 6, 7)
-	fmt.Println(s1)
+func maxEnergyBoost(energyDrinkA []int, energyDrinkB []int) int64 {
+	return 0
+}
 
-	var a = []int{1, 2, 3, 4, 5}
-	var r [5]int
-
-	for i, v := range a {
-		if i == 0 {
-			a[1] = 12
-			a[2] = 13
-		}
-		r[i] = v
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
 	}
-	fmt.Println("r = ", r)
-	fmt.Println("a = ", a)
 
-	slice := make([]int, 5, 5)
-	slice[0] = 1
-	slice[1] = 2
-	change(slice)
-	fmt.Println(slice)
-	change(slice[0:2])
-	fmt.Println(slice)
+	if root.Val == p.Val || root.Val == q.Val {
+		return root
+	}
 
-	x := make([]int, 2, 10)
-	_ = x[6:10] //1
-	_ = x[6:]   //2
-	_ = x[2:]   //3
+	left := lowestCommonAncestor(root.Left, p, q)
+	right := lowestCommonAncestor(root.Right, p, q)
+	if left != nil && right != nil {
+		return root
+	}
+
+	if left == nil {
+		return right
+	}
+	return left
+}
+
+func main() {
 }
