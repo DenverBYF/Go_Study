@@ -3,6 +3,7 @@ package main
 import (
 	"example.com/m/v2/structture"
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -359,6 +360,18 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 		return right
 	}
 	return left
+}
+
+func judgeSquareSum(c int) bool {
+	end := int(math.Ceil(math.Sqrt(float64(c))))
+	m := make(map[int]bool)
+	for i := 0; i <= end; i++ {
+		m[i*i] = true
+		if m[c-(i*i)] {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
