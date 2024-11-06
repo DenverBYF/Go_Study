@@ -341,6 +341,59 @@ func quickSort(input []int) []int {
 	return append(append(left, pivot), right...)
 }
 
+func minChanges(n int, k int) int {
+	if n == k {
+		return 0
+	}
+	if n < k {
+		return -1
+	}
+	nBinStr := fmt.Sprintf("%b", n)
+	kBinStr := fmt.Sprintf("%b", k)
+	if len(nBinStr) < len(kBinStr) {
+		return -1
+	}
+	res := 0
+	i := len(nBinStr) - 1
+	j := len(kBinStr) - 1
+	for i >= 0 && j >= 0 {
+		if nBinStr[i] == '1' && nBinStr[i] != kBinStr[j] {
+			res++
+		}
+		if nBinStr[i] == '0' && nBinStr[i] != kBinStr[j] {
+			return -1
+		}
+		i--
+		j--
+	}
+	if i >= 0 {
+		for ; i >= 0; i-- {
+			if nBinStr[i] == '1' {
+				res++
+			}
+		}
+	}
+	return res
+}
+
+func groupAnagrams(strs []string) [][]string {
+	res := make([][]string, 0)
+	m := make(map[[26]int][]string)
+	for _, str := range strs {
+		hashKey := [26]int{}
+		for i := 0; i < len(str); i++ {
+			hashKey[str[i]-'a']++
+		}
+		m[hashKey] = append(m[hashKey], str)
+	}
+
+	for _, list := range m {
+		res = append(res, list)
+	}
+
+	return res
+}
+
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
@@ -395,5 +448,5 @@ func losingPlayer(x int, y int) string {
 }
 
 func main() {
-	fmt.Println(maxEnergyBoost([]int{1, 3, 1}, []int{3, 1, 1}))
+	fmt.Println(fmt.Sprintf("%b", 44), fmt.Sprintf("%b", 2))
 }
