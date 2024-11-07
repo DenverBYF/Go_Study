@@ -1,6 +1,7 @@
 package main
 
 import (
+	"example.com/m/v2/language"
 	"example.com/m/v2/structture"
 	"fmt"
 	"math"
@@ -449,4 +450,5 @@ func losingPlayer(x int, y int) string {
 
 func main() {
 	fmt.Println(fmt.Sprintf("%b", 44), fmt.Sprintf("%b", 2))
+	language.TestChan()
 }
