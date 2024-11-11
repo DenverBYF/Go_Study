@@ -1,7 +1,6 @@
 package main
 
 import (
-	"example.com/m/v2/language"
 	"example.com/m/v2/structture"
 	"fmt"
 	"math"
@@ -448,7 +447,46 @@ func losingPlayer(x int, y int) string {
 	return "Alice"
 }
 
+func resultsArray(nums []int, k int) []int {
+	res := make([]int, len(nums)-k+1)
+	if k == 1 {
+		res[0] = nums[0]
+	}
+	cnt := 1
+	for i := 1; i < len(nums); i++ {
+		if nums[i] == nums[i-1]+1 {
+			cnt++
+		} else {
+			cnt = 1
+		}
+		if i >= k-1 {
+			if cnt >= k {
+				res[i-k+1] = nums[i]
+			} else {
+				res[i-k+1] = -1
+			}
+		}
+	}
+	return res
+}
+
 func main() {
-	fmt.Println(fmt.Sprintf("%b", 44), fmt.Sprintf("%b", 2))
-	language.TestChan()
+	//fmt.Println(fmt.Sprintf("%b", 44), fmt.Sprintf("%b", 2))
+	//language.TestChan()
+
+	lRUCache := structture.Constructor(3)
+	lRUCache.Put(1, 1)
+	lRUCache.Put(2, 2)
+	lRUCache.Put(3, 3)
+	lRUCache.Put(4, 4)
+	fmt.Println(lRUCache.Get(4))
+	fmt.Println(lRUCache.Get(3))
+	fmt.Println(lRUCache.Get(2))
+	fmt.Println(lRUCache.Get(1))
+	lRUCache.Put(5, 5)
+	fmt.Println(lRUCache.Get(1))
+	fmt.Println(lRUCache.Get(2))
+	fmt.Println(lRUCache.Get(3))
+	fmt.Println(lRUCache.Get(4))
+	fmt.Println(lRUCache.Get(5))
 }
