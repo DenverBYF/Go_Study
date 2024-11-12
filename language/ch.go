@@ -43,3 +43,41 @@ func TestChan() {
 
 	wg.Wait()
 }
+
+func PrintNumAndLetter() {
+	numCh := make(chan bool)
+	letterCh := make(chan bool)
+
+	wg := sync.WaitGroup{}
+	go func() {
+		i := 0
+		for {
+			select {
+			case <-numCh:
+				fmt.Println(i)
+				i++
+				letterCh <- true
+			}
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		i := 'A'
+		for {
+			select {
+			case <-letterCh:
+				if i > 'Z' {
+					wg.Done()
+					return
+				}
+				fmt.Println(string(i))
+				i++
+				numCh <- true
+			}
+		}
+	}()
+
+	numCh <- true
+	wg.Wait()
+}
