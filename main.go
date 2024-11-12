@@ -470,11 +470,94 @@ func resultsArray(nums []int, k int) []int {
 	return res
 }
 
+/*
+有一根长度为 n 个单位的木棍，棍上从 0 到 n 标记了若干位置
+给你一个整数数组 cuts ，其中 cuts[i] 表示你需要将棍子切开的位置。
+你可以按顺序完成切割，也可以根据需要更改切割的顺序。
+每次切割的成本都是当前要切割的棍子的长度，切棍子的总成本是历次切割成本的总和。
+对棍子进行切割将会把一根木棍分成两根较小的木棍（这两根木棍的长度和就是切割前木棍的长度）。请参阅第一个示例以获得更直观的解释。
+返回切棍子的 最小总成本 。
+*/
+func minCost(n int, cuts []int) int {
+
+	return 0
+}
+
+/*
+有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
+现在要求你戳破所有的气球。戳破第 i 个气球，
+你可以获得 nums[i - 1] * nums[i] * nums[i + 1] 枚硬币。
+这里的 i - 1 和 i + 1 代表和 i 相邻的两个气球的序号。
+如果 i - 1或 i + 1 超出了数组的边界，那么就当它是一个数字为 1 的气球。
+求所能获得硬币的最大数量。
+*/
+func maxCoins(nums []int) int {
+	return 0
+}
+
+func MaxInt(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+/*
+给你一个 二进制 字符串 s 和一个整数 k。
+如果一个 二进制字符串 满足以下任一条件，则认为该字符串满足 k 约束：
+字符串中 0 的数量最多为 k。
+字符串中 1 的数量最多为 k。
+返回一个整数，表示 s 的所有满足 k 约束的子字符串的数量。
+*/
+func countKConstraintSubstrings(s string, k int) int {
+	res := 0
+	/*for i := 0; i < len(s); i++ {
+		val0 := 0
+		val1 := 0
+		for j := i; j < len(s); j++ {
+			if s[j] == '0' {
+				val0++
+			}
+			if s[j] == '1' {
+				val1++
+			}
+			if val0 <= k || val1 <= k {
+				res++
+			}
+			if val0 > k && val1 > k {
+				break
+			}
+		}
+	}*/
+	val0 := 0
+	val1 := 0
+	left := 0
+	for i := 0; i < len(s); i++ {
+		if s[i] == '0' {
+			val0++
+		}
+		if s[i] == '1' {
+			val1++
+		}
+		for val0 > k && val1 > k {
+			if s[left] == '0' {
+				val0--
+			}
+			if s[left] == '1' {
+				val1--
+			}
+			left++
+		}
+		res += i - left + 1
+	}
+	return res
+}
+
 func main() {
 	//fmt.Println(fmt.Sprintf("%b", 44), fmt.Sprintf("%b", 2))
 	//language.TestChan()
 
-	lRUCache := structture.Constructor(3)
+	/*lRUCache := structture.Constructor(3)
 	lRUCache.Put(1, 1)
 	lRUCache.Put(2, 2)
 	lRUCache.Put(3, 3)
@@ -488,5 +571,5 @@ func main() {
 	fmt.Println(lRUCache.Get(2))
 	fmt.Println(lRUCache.Get(3))
 	fmt.Println(lRUCache.Get(4))
-	fmt.Println(lRUCache.Get(5))
+	fmt.Println(lRUCache.Get(5))*/
 }
