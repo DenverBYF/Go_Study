@@ -13,6 +13,11 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
 /*
 给你一个包含若干星号 * 的字符串 s 。
 
