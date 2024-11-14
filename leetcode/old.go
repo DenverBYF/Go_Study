@@ -514,7 +514,7 @@ func MaxInt(a, b int) int {
 字符串中 1 的数量最多为 k。
 返回一个整数，表示 s 的所有满足 k 约束的子字符串的数量。
 */
-func countKConstraintSubstrings(s string, k int) int {
+func countKConstraintSubstringsV1(s string, k int) int {
 	res := 0
 	/*for i := 0; i < len(s); i++ {
 		val0 := 0
