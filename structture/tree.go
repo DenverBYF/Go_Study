@@ -8,6 +8,11 @@ type Tree struct {
 	Val   interface{}
 }
 
+type MulTree struct {
+	Val   interface{}
+	Child []*MulTree
+}
+
 func PreOrder(t *Tree) {
 	if t == nil {
 		return
@@ -100,4 +105,39 @@ func PostOrderTraversal(t *Tree) {
 		v, _ := st2.Pop()
 		fmt.Println(v.(*Tree).Val)
 	}
+}
+
+func dfs(root *MulTree, vis map[*MulTree]bool) {
+	if root == nil || vis[root] {
+		return
+	}
+	fmt.Println(root.Val)
+	vis[root] = true
+	for _, child := range root.Child {
+		dfs(child, vis)
+	}
+}
+
+func bfs(root *MulTree) {
+	if root == nil {
+		return
+	}
+	vis := make(map[*MulTree]bool)
+	queue := make([]*MulTree, 0)
+	queue = append(queue, root)
+	for len(queue) > 0 {
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			node := queue[i]
+			fmt.Println(node.Val)
+			vis[node] = true
+			for _, child := range node.Child {
+				if !vis[child] {
+					queue = append(queue, child)
+				}
+			}
+		}
+		queue = queue[size:]
+	}
+	return
 }
