@@ -71,7 +71,6 @@ func (h *HttpTimer) run() {
 				if h.Err != nil || h.Ret.StatusCode != 200 {
 					fmt.Println("request failed", h.Err, h.Ret.StatusCode)
 					h.FailCount++
-					h.mu.Unlock()
 					break
 				}
 				fmt.Println("request success", h.Ret.StatusCode, h.LastUpdateTime.Unix())
@@ -81,7 +80,6 @@ func (h *HttpTimer) run() {
 				if h.Err != nil || h.Ret.StatusCode != 200 {
 					fmt.Println("request failed", h.Err, h.Ret.StatusCode)
 					h.FailCount++
-					h.mu.Unlock()
 					break
 				}
 				fmt.Println("request success", h.Ret.StatusCode, h.LastUpdateTime.Unix())
