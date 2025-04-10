@@ -26,8 +26,14 @@ type HttpTimer struct {
 	Ret *httpx.Ret
 	// 最后更新时间
 	LastUpdateTime time.Time
+	// 请求次数
+	RequestCount int
+	// 失败次数
+	FailCount int
 	// 错误
 	Err error
+	// 是否运行
+	Running bool
 }
 
 type Req struct {
@@ -57,26 +63,31 @@ func (h *HttpTimer) run() {
 		select {
 		case <-ticker.C:
 			h.mu.Lock()
+			h.Running = true
 			switch h.Req.Method {
 			case "GET":
 				h.Ret, h.Err = httpx.HttpGet(context.Background(), h.hc, h.Req.Url, nil)
 				h.LastUpdateTime = time.Now()
-				if h.Err != nil {
-					fmt.Println("request failed", h.Err)
-					continue
+				if h.Err != nil || h.Ret.StatusCode != 200 {
+					fmt.Println("request failed", h.Err, h.Ret.StatusCode)
+					h.FailCount++
+					break
 				}
 				fmt.Println("request success", h.Ret.StatusCode, h.LastUpdateTime.Unix())
 			case "POST":
 				h.Ret, h.Err = httpx.HttpPost(context.Background(), h.hc, h.Req.Url, h.Req.Body, h.Req.Headers)
 				h.LastUpdateTime = time.Now()
-				if h.Err != nil {
-					fmt.Println("request failed", h.Err)
-					continue
+				if h.Err != nil || h.Ret.StatusCode != 200 {
+					fmt.Println("request failed", h.Err, h.Ret.StatusCode)
+					h.FailCount++
+					break
 				}
 				fmt.Println("request success", h.Ret.StatusCode, h.LastUpdateTime.Unix())
 			}
+			h.RequestCount++
 			h.mu.Unlock()
 		case <-h.stopChan:
+			h.Running = false
 			return
 		}
 	}
@@ -92,6 +103,24 @@ func (h *HttpTimer) GetLastUpdateTime() int64 {
 	return h.LastUpdateTime.Unix()
 }
 
+func (h *HttpTimer) IsRunning() bool {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.Running
+}
+
+func (h *HttpTimer) GetRequestCount() int {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.RequestCount
+}
+
+func (h *HttpTimer) GetFailCount() int {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.FailCount
+}
+
 func registerHttpTimer(L *lua.LState) {
 	mt := L.NewTypeMetatable("http_timer")
 	L.SetGlobal("http_timer", mt)
@@ -104,6 +133,21 @@ func registerHttpTimer(L *lua.LState) {
 		"get_last_update_time": func(L *lua.LState) int {
 			h := L.CheckUserData(1).Value.(*HttpTimer)
 			L.Push(lua.LNumber(h.GetLastUpdateTime()))
+			return 1
+		},
+		"is_running": func(L *lua.LState) int {
+			h := L.CheckUserData(1).Value.(*HttpTimer)
+			L.Push(lua.LBool(h.IsRunning()))
+			return 1
+		},
+		"get_request_count": func(L *lua.LState) int {
+			h := L.CheckUserData(1).Value.(*HttpTimer)
+			L.Push(lua.LNumber(h.GetRequestCount()))
+			return 1
+		},
+		"get_fail_count": func(L *lua.LState) int {
+			h := L.CheckUserData(1).Value.(*HttpTimer)
+			L.Push(lua.LNumber(h.GetFailCount()))
 			return 1
 		},
 	}
